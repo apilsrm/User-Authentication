@@ -118,7 +118,9 @@ const registerUser = asyncHandler(async (req, res) => {
   //console.log(req.files);
 
   //multer gives req.files excess
-  const avatarLocalPath = req.files?.avatar[0]?.path; //its (multer) give proper file path
+//   const avatarLocalPath = req.files?.avatar[0]?.path; //its (multer) give proper file path
+  const avatarLocalPath = req.file.avatar.path; //its (multer) give proper file path
+
 
   //check for avatar
   if (!avatarLocalPath) {

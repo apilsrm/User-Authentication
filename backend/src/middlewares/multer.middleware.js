@@ -3,7 +3,7 @@ import multer from "multer";
 //The disk storage engine gives you full control on storing files to disk.
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "./public/gallery")
+      cb(null, "../../public/gallery")
     },
     filename: function (req, file, cb) {
      
