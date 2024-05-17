@@ -55,9 +55,10 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+// Pre middleware to hash the password before saving
 //Pre middleware functions are executed one after another, when each middleware calls next.
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next(); // to check password field is modified or not
+  if(!this.isModified("password")) return next(); // to check password field is modified or not
 
   this.password = await bcrypt.hash(this.password, 10);
   next();

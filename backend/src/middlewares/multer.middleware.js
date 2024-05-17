@@ -1,9 +1,10 @@
 import multer from "multer";
+import path from "path";
 
 //The disk storage engine gives you full control on storing files to disk.
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, "../../public/gallery")
+      cb(null,  "./public/gallery")   // ../../public/gallery-> D:\projects!\public\gallery\user3.jpg&#39
     },
     filename: function (req, file, cb) {
      
