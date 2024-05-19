@@ -6,6 +6,7 @@ Main Features:
 ```
 User Registration
 User Login
+Change password
 Profile Viewing
 Profile Updating
 Account Deletion
