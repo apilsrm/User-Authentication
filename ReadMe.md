@@ -11,25 +11,29 @@ Before you start, make sure you have Node.js and Yarn installed on your system. 
 
 ## Project Structure
 
+```
+
 The project has the following structure:
+
+
 For Frontend
+
 src/
-  components/
-    ChangePassword.jsx
-    Home.jsx
-    Login.jsx
-    Profile.jsx
-    SignUp.jsx
-  redux/
+   components/
+       ChangePassword.jsx
+      Home.jsx
+      Login.jsx
+      Profile.jsx
+      SignUp.jsx
+   redux/
      apiRoutes/
-        api.js
+         api.js
      featues/
         authslice.js
      store/
          store.js
-  utils/
-    ProtectedRoutes.js
-```
+   utils/
+      ProtectedRoutes.js
 
 
 
