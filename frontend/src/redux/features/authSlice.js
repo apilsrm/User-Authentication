@@ -4,10 +4,10 @@ import * as api from "../apiRoutes/api";
 //userRegister
 export const register = createAsyncThunk(
   "/register",
-  async ({ formData, toast, navigate }, { rejectWithValue }) => {
+  async ({ formData, navigate }, { rejectWithValue }) => {
     try {
       const response = await api.userRegister(formData);
-      toast.success(response.data.message || "user register succesfully");
+      alert(response.data.message || "user register succesfully");
       navigate("/login");
       return response.data;
     } catch (error) {
@@ -23,14 +23,10 @@ export const login = createAsyncThunk(
     try {
       const response = await api.userLogin(loginValue);
       toast.success(response.data.message || "user login succesfully");
-
-      if (response.data.user.role === "admin") {
-        navigate("/admin/panel");
-      } else {
-        navigate("/");
-      }
-
+      navigate("/");
+      console.log(response.data);
       return response.data;
+
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -38,10 +34,11 @@ export const login = createAsyncThunk(
 );
 
 export const profile = createAsyncThunk(
-  "/profile",
+  "/current-user",
   async (__, { rejectWithValue }) => {
     try {
       const response = await api.userProfile();
+      console.log(response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -52,11 +49,14 @@ export const profile = createAsyncThunk(
 //update porfile
 export const profileUpdate = createAsyncThunk(
   "/update-account",
-  async ({ updateForm, toast }, { rejectWithValue, dispatch }) => {
+  async ({ updateValue, toast, navigate }, { rejectWithValue  }) => {
     try {
+      const updateForm = updateValue
+      console.log(updateForm)
       const response = await api.updateProfile(updateForm);
       toast.success(response.data.message || "profilee update success! ");
-      dispatch(profile());
+      navigate("/")
+      
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -66,11 +66,12 @@ export const profileUpdate = createAsyncThunk(
 
 export const avatarUpdateUser = createAsyncThunk(
   "/avatar",
-  async ({ updateForm, toast }, { rejectWithValue, dispatch }) => {
+  async ({ updateForm, toast, navigate }, { rejectWithValue }) => {
     try {
+      // const updateForm= updateForm
       const response = await api.updateUserAvatar(updateForm);
       toast.success(response.data.message || "Avatar update success! ");
-      dispatch(profile());
+      navigate("/")
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -98,9 +99,9 @@ export const changePassword = createAsyncThunk(
 //deletePofile
 export const profileDelete = createAsyncThunk(
   "/delete",
-  async ({ id, toast, navigate }, { rejectWithValue, dispatch }) => {
+  async ({ _id, toast, navigate }, { rejectWithValue, dispatch }) => {
     try {
-      const response = await api.deleteProfile(id);
+      const response = await api.deleteProfile(_id);
       toast.success(response.data.message || "user delete successfully");
       dispatch(clearUser());
       navigate("/register");
@@ -158,10 +159,12 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(login.fulfilled, (state, action) => {
+        // console.log("muji")
+        // console.log("Here: ",action.payload.data.user)
         state.loading = false;
-        localStorage.setItem("token", action.payload.token);
+        localStorage.setItem("token", action.payload.data.accessToken);
         state.verifyJWT = true;
-        state.user = action.payload.user;
+        state.user = action.payload.data.user;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -173,7 +176,7 @@ const authSlice = createSlice({
       })
       .addCase(profile.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
+        state.user = action.payload.data;
       })
       .addCase(profile.rejected, (state, action) => {
         state.loading = false;
@@ -222,7 +225,8 @@ const authSlice = createSlice({
       })
       .addCase(profileDelete.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        localStorage.removeItem("token");
+        state.user = {};
       })
       .addCase(profileDelete.rejected, (state, action) => {
         state.loading = false;

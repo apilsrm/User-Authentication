@@ -37,7 +37,7 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String, // cloudinary url
-      required: true,
+      required: false,
     },
     refreshToken: {
       type: String,

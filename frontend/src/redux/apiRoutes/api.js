@@ -35,13 +35,13 @@ export const userProfile = () => API.get("/current-user");
 export const passwordUpdate = (changeValue) => API.put("/change-password", changeValue)
 
 //update profile 
-export const updateProfile = (updateForm) => API.put("/update-account", updateForm);
+export const updateProfile = (updateForm) => API.patch("/update-account", updateForm);
 //upadte avatar
 export const updateUserAvatar = (updateForm) => API.put("/avatar", updateForm);
 
 
 //delete profile 
-export const deleteProfile = (id) => API.delete(`/delete/${id}`);
+export const deleteProfile = (_id) => API.delete(`/delete/${_id}`);
 
 
 

@@ -122,6 +122,8 @@ if ( isNaN(mobileNo) || mobileNo.toString().trim() === "") {
   if (existedUser) {
     throw new ApiError(409, "User with email or username already exists");
   }
+  
+  /*
   console.log(req.files);
 
   //multer gives req.files excess
@@ -140,11 +142,11 @@ if ( isNaN(mobileNo) || mobileNo.toString().trim() === "") {
   if (!avatar) {
     throw new ApiError(400, "Avatar file is required");
   }
-
+     */
   //to create file in db  use store image ko url
   const user = await User.create({
     fullName,
-    avatar: avatar.url,
+    // avatar: avatar.url,
     email,
     password,
     mobileNo,
@@ -173,66 +175,70 @@ const loginUser = asyncHandler(async (req, res) => {
   //access and refresh token
   //send token through cookies
 
-  const { email, username, password } = req.body;
-  //console.log(email)
-
-  //we need username or email
-  if (!username && !email) {
-    throw new ApiError(400, "username or email is required");
-  }
-  // alternative of above code
-  // if (!(username || email)) {
-  //     throw new ApiError(400, "username or email is required")
-
-  // }
-
-  const user = await User.findOne({
-    $or: [{ username }, { email }],
-  }).select('+password'); // Ensure the password is selected
-   //we find user based on  username or email
-
-  if (!user) {
-    throw new ApiError(404, "User does not exist");
-  }
-
-  //check password
-  const isPasswordValid = await user.isPasswordCorrect(password);
-
-  if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid user credentials");
-  }
-
-  //generate token here
-  const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
-    user._id
-  );
-
-  //above user token is empty bcz we generate token below  so i used User(Model)
-  const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken"
-  );
-
-  //now for cookies
-  const options = {
-    httpOnly: true,
-    secure: true,
-  }; //this cookies only modified by server
-
-  return res
-    .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        {
-          user: loggedInUser,
-          accessToken,
-          refreshToken,
-        },
-        "User logged In Successfully"
-      )
+  try {
+    const { email, username, password } = req.body;
+    //console.log(email)
+  
+    //we need username or email
+    if (!username && !email) {
+      throw new ApiError(400, "username or email is required");
+    }
+    // alternative of above code
+    // if (!(username || email)) {
+    //     throw new ApiError(400, "username or email is required")
+  
+    // }
+  
+    const user = await User.findOne({
+      $or: [{ username }, { email }],
+    }).select('+password'); // Ensure the password is selected
+     //we find user based on  username or email
+  
+    if (!user) {
+      throw new ApiError(404, "User does not exist");
+    }
+  
+    //check password
+    const isPasswordValid = await user.isPasswordCorrect(password);
+  
+    if (!isPasswordValid) {
+      throw new ApiError(401, "Invalid user credentials");
+    }
+  
+    //generate token here
+    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
+      user._id
     );
+  
+    //above user token is empty bcz we generate token below  so i used User(Model)
+    const loggedInUser = await User.findById(user._id).select(
+      "-password -refreshToken"
+    );
+  
+    //now for cookies
+    const options = {
+      httpOnly: true,
+      secure: true,
+    }; //this cookies only modified by server
+  
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(
+        new ApiResponse(
+          200,
+          {
+            user: loggedInUser,
+            accessToken,
+            refreshToken,
+          },
+          "User logged In Successfully"
+        )
+      );
+  } catch (error) {
+    
+  }
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -262,26 +268,31 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const deleteUser = asyncHandler(async (req, res, next) => {
-    const { userId } = req.params;
+  
+    // req.user?._id
+    // const { _id } = req.params;
+    const { _id } = req.user?._id;
+
+  // console.log(_id);
   
     // Validate userId
-    if (!userId) {
+    if (!_id) {
       throw new ApiError(400, "User ID is required");
     }
   
     // Check if the user exists
-    const user = await User.findById(userId);
+    const user = await User.findById(_id);
     if (!user) {
       throw new ApiError(404, "User not found");
     }
   
     // Delete user
-    await User.findByIdAndDelete(userId);
+    await User.findByIdAndDelete(_id);
   
     // Return response
     return res
       .status(200)
-      .json(new ApiResponse(200, null, "User deleted successfully"));
+      .json(new ApiResponse(200, {}, "User deleted successfully"));
   });
   
 const changeCurrentPassword = asyncHandler(async (req, res) => {
@@ -316,10 +327,10 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-  // user cannot update email or username in my case
-  const { fullName, mobileNo } = req.body;
-
-  if (!fullName || !mobileNo) {
+  // user cannot update email in my case
+  const { fullName, mobileNo, username} = req.body;
+//  console.log
+  if (!fullName || !mobileNo || !username) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -329,6 +340,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
       $set: {
         mobileNo: mobileNo,
         fullName: fullName,
+        username: username,
       },
     },
     { new: true }
@@ -338,7 +350,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Account details updated successfully"));
 });
-const updateUserAvatar = asyncHandler(async (req, res) => {
+const updateUserAvatar = asyncHandler(async (req, res, next) => {
 try {
     console.log('Request body:', req.body);
     console.log('Request file:', req.file);

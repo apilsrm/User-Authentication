@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
    const {user, isLoading, error } = useSelector((state) =>state.auth)
+  //  console.log("gdfdh");
      const dispatch = useDispatch();
      const navigate = useNavigate();
 
@@ -19,10 +20,8 @@ const Profile = () => {
 
      const [updateValue, setUpdateValue] = useState({
       fullName: "",
-      email: "",
       username: "",
       mobileNo: "",
-      role: "",
     });
 
   const [avatarPreview, setAvatarPreview] = useState(null);
@@ -34,13 +33,16 @@ const Profile = () => {
 
 
    const handleChange = (e) => {
+    // console.log(e.target.value)
     let { name, value } = e.target;
     setUpdateValue({ ...updateValue, [name]: value });
+    // console.log(updateValue)
   };
   
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
+    // setAvatarFile(file);
 
     if (file) {
       setAvatarFile(file);
@@ -65,7 +67,7 @@ const Profile = () => {
     updateForm.append("mobileNo", mobileNo);
     // updateForm.append("avatar", avatar);
 
-    dispatch(profileUpdate({ updateForm, toast }));
+    dispatch(profileUpdate({ updateValue, toast, navigate }));
   };
   
   useEffect(() => {
@@ -78,6 +80,7 @@ const Profile = () => {
     }
   }, [user]);
   
+
   //for avatar 
   const handleAvatarSubmit = (e) => {
     e.preventDefault();
@@ -86,7 +89,7 @@ const Profile = () => {
    
     updateForm.append("avatar", avatar);
 
-    dispatch(avatarUpdateUser({ updateForm, toast }));
+    dispatch(avatarUpdateUser({ updateForm, toast, navigate }));
   };
   useEffect(() => {
     if (user) {
@@ -110,6 +113,7 @@ const Profile = () => {
   //handle deleteuser part
   const handleDeleteUser =  (id) => {
     try {
+      
       dispatch(profileDelete({id, toast, navigate})); // Your delete user logic here
       alert("User deleted successfully");
       

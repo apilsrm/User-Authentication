@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import { clearError, register } from "../redux/features/authSlice";
 import Spinner from "../layouts/Spinners.jsx"
 import { Link, useNavigate } from "react-router-dom";
@@ -17,12 +16,11 @@ const Register = () => {
     mobileNo: "",
     password: "",
     confirmPassword: "",
-    avatar:"",
   });
 
   const [registerErr, setRegister] = useState({});
 
-  const { fullName, username, email, mobileNo, password, confirmPassword, avatar } = formData;
+  const { fullName, username, email, mobileNo, password, confirmPassword } = formData;
 
   //custom error handle
 
@@ -69,15 +67,15 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validatedForm()) {
-      dispatch(register({ formData, toast, navigate }));
+      dispatch(register({ formData, navigate }));
     } else {
-      return toast.warning("invalid data");
+      return alert("invalid data");
     }
   };
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
+      alert(error);
       dispatch(clearError());
     }
   }, [dispatch, error]);
@@ -201,32 +199,7 @@ const Register = () => {
               <span className="text-red-500">{registerErr.confirmPassword}</span>
             )}
           </div>
-          <div className="mb-4">
-            <label
-              htmlFor="avatar"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Avatar
-            </label>
-            <img
-                src={avatar}
-                alt="avatarImg"
-                className="w-32 h-32 object-cover"
-              />
-            <input
-              type="file"
-              id="avatar"
-              name="avatar"
-              accept="image/*"
-              className="mt-1 px-4 py-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500"
-              value={avatar}
-              onChange={handleChange}
-            />
-           
-            {registerErr && (
-              <span className="text-red-500">{registerErr.confirmPassword}</span>
-            )}
-          </div>
+         
        
 
           <div className="mt-4">
@@ -238,7 +211,8 @@ const Register = () => {
               Register
             </button>
           </div>
-          <span>Already have an account <Link to="/login" className="no-underline"> Login here</Link></span>
+          <span>Already have an account <Link to="/login" className=" text-blue-500 no-underline">{" "} Login here</Link></span>
+         
         </form>
       </div>
       ;

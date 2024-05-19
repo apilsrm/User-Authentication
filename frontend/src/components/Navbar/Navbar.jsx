@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 
 import { Link } from "react-router-dom";
 const NavBar = ({ verifyJWT, user }) => {
-
+  console.log(user);
+  
 
   return ( <>
     <Navbar fluid rounded>
