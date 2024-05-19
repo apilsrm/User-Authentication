@@ -19,10 +19,10 @@ export const register = createAsyncThunk(
 //user login
 export const login = createAsyncThunk(
   "/login",
-  async ({ loginValue, toast, navigate }, { rejectWithValue }) => {
+  async ({ loginValue, navigate }, { rejectWithValue }) => {
     try {
       const response = await api.userLogin(loginValue);
-      toast.success(response.data.message || "user login succesfully");
+      alert(response.data.message || "user login succesfully");
       navigate("/");
       console.log(response.data);
       return response.data;
@@ -49,12 +49,12 @@ export const profile = createAsyncThunk(
 //update porfile
 export const profileUpdate = createAsyncThunk(
   "/update-account",
-  async ({ updateValue, toast, navigate }, { rejectWithValue  }) => {
+  async ({ updateValue, navigate }, { rejectWithValue  }) => {
     try {
       const updateForm = updateValue
       console.log(updateForm)
       const response = await api.updateProfile(updateForm);
-      toast.success(response.data.message || "profilee update success! ");
+      alert(response.data.message || "profilee update success! ");
       navigate("/")
       
       return response.data;
@@ -66,11 +66,11 @@ export const profileUpdate = createAsyncThunk(
 
 export const avatarUpdateUser = createAsyncThunk(
   "/avatar",
-  async ({ updateForm, toast, navigate }, { rejectWithValue }) => {
+  async ({ updateForm, navigate }, { rejectWithValue }) => {
     try {
       // const updateForm= updateForm
       const response = await api.updateUserAvatar(updateForm);
-      toast.success(response.data.message || "Avatar update success! ");
+      alert(response.data.message || "Avatar update success! ");
       navigate("/")
       return response.data;
     } catch (error) {
@@ -82,10 +82,10 @@ export const avatarUpdateUser = createAsyncThunk(
 //change password
 export const changePassword = createAsyncThunk(
   "/change-password",
-  async ({ changeValue, toast, navigate }, { rejectWithValue, dispatch }) => {
+  async ({ changeValue, navigate }, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.passwordUpdate(changeValue);
-      toast.success(response.data.message || "password channge sucessfully");
+      alert(response.data.message || "password channge sucessfully");
       dispatch(setLogout());
       dispatch(clearUser());
       navigate("/login");
@@ -99,10 +99,10 @@ export const changePassword = createAsyncThunk(
 //deletePofile
 export const profileDelete = createAsyncThunk(
   "/delete",
-  async ({ _id, toast, navigate }, { rejectWithValue, dispatch }) => {
+  async ({ _id, navigate }, { rejectWithValue, dispatch }) => {
     try {
       const response = await api.deleteProfile(_id);
-      toast.success(response.data.message || "user delete successfully");
+      alert(response.data.message || "user delete successfully");
       dispatch(clearUser());
       navigate("/register");
 
@@ -223,7 +223,7 @@ const authSlice = createSlice({
       .addCase(profileDelete.pending, (state) => {
         state.loading = true;
       })
-      .addCase(profileDelete.fulfilled, (state, action) => {
+      .addCase(profileDelete.fulfilled, (state) => {
         state.loading = false;
         localStorage.removeItem("token");
         state.user = {};

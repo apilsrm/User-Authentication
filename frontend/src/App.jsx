@@ -6,8 +6,6 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Profile from "./components/Profile";
 import ChangePassword from "./components/ChangePassword.jsx";
-
-import { ToastContainer } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { profile } from "./redux/features/authSlice.js"
@@ -32,7 +30,6 @@ const  App =() => {
     <>
 <div className="App">
       <Router>
-      <ToastContainer />
         <NavBar verifyJWT={verifyJWT} user={user} />
         <main className="flex-grow"> 
         

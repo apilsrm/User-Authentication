@@ -5,7 +5,6 @@ import img from "../assets/landing.jpg";
 const Home = () => {
   return (
     <>
-      {/* Hero Section */}
       <div className="relative h-screen flex flex-col justify-center items-center bg-cover bg-center text-white" style={{ backgroundImage: `url(${img})` }}>
         <div className="bg-black bg-opacity-50 absolute inset-0"></div>
         <div className="relative z-10 p-4 text-center">

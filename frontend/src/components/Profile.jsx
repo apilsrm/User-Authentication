@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { avatarUpdateUser, clearError, profile, profileDelete, profileUpdate } from "../redux/features/authSlice";
-import { toast } from "react-toastify";
 import Spinners from "../layouts/Spinners";
 import { useNavigate } from "react-router-dom";
 // import axios from "axios";
@@ -67,7 +66,7 @@ const Profile = () => {
     updateForm.append("mobileNo", mobileNo);
     // updateForm.append("avatar", avatar);
 
-    dispatch(profileUpdate({ updateValue, toast, navigate }));
+    dispatch(profileUpdate({ updateValue, navigate }));
   };
   
   useEffect(() => {
@@ -89,7 +88,7 @@ const Profile = () => {
    
     updateForm.append("avatar", avatar);
 
-    dispatch(avatarUpdateUser({ updateForm, toast, navigate }));
+    dispatch(avatarUpdateUser({ updateForm, navigate }));
   };
   useEffect(() => {
     if (user) {
@@ -101,7 +100,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (error && !shownToasstOnce.current) {
-      toast.error(error);
+      alert(error);
       dispatch(clearError());
       shownToasstOnce.current = true;
     }
@@ -114,7 +113,7 @@ const Profile = () => {
   const handleDeleteUser =  (id) => {
     try {
       
-      dispatch(profileDelete({id, toast, navigate})); // Your delete user logic here
+      dispatch(profileDelete({id, navigate})); // Your delete user logic here
       alert("User deleted successfully");
       
     } catch (error) {

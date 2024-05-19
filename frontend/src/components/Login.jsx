@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearError, login } from "../redux/features/authSlice";
 import { Spinner } from "flowbite-react";
-import { toast } from "react-toastify";
 
 const Login = () => {
   const { loading, error } = useSelector((state) => state.auth);
@@ -50,15 +49,15 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validatedForm()) {
-      dispatch(login({ loginValue, toast, navigate }));
+      dispatch(login({ loginValue, navigate }));
     } else {
-      return toast.warning("invalid data");
+      return alert("invalid data");
     }
   };
 
   useEffect(() => {
     if (error) {
-      toast.error(error);
+      alert(error);
       dispatch(clearError());
     }
   }, [dispatch, error]);

@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { toast } from "react-toastify";
-
 
 import Spinners from "../layouts/Spinners";
 import { changePassword, clearError } from "../redux/features/authSlice";
@@ -30,7 +28,7 @@ const ChangePassword = () => {
   };
   useEffect(() => {
     if (error) {
-      toast.error(error);
+      alert(error);
       dispatch(clearError())
     }
   }, [dispatch, error]);
@@ -61,9 +59,9 @@ const ChangePassword = () => {
     e.preventDefault();
 
     if (validatedForm()) {
-      dispatch(changePassword({ changeValue, toast, navigate }));
+      dispatch(changePassword({ changeValue, navigate }));
     } else {
-      return toast.warning("invalid data");
+      return alert("invalid data");
     }
   };
   return (
