@@ -23,10 +23,10 @@ API.interceptors.request.use((req)=> {
 
 
 //user register
-export const userRegister = (formData) => API.post("/register",formData)
+export const userRegister = (formData) => API.post("/register", formData)
 
 //user login
-export const userLogin = (loginValue) => API.post("/login",loginValue)
+export const userLogin = (loginValue) => API.post("/login", loginValue)
 
 //get profile
 export const userProfile = () => API.get("/current-user");

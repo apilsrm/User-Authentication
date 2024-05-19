@@ -17,11 +17,12 @@ const Register = () => {
     mobileNo: "",
     password: "",
     confirmPassword: "",
+    avatar:"",
   });
 
   const [registerErr, setRegister] = useState({});
 
-  const { fullName, username, email, mobileNo, password, confirmPassword } = formData;
+  const { fullName, username, email, mobileNo, password, confirmPassword, avatar } = formData;
 
   //custom error handle
 
@@ -200,6 +201,33 @@ const Register = () => {
               <span className="text-red-500">{registerErr.confirmPassword}</span>
             )}
           </div>
+          <div className="mb-4">
+            <label
+              htmlFor="avatar"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Avatar
+            </label>
+            <img
+                src={avatar}
+                alt="avatarImg"
+                className="w-32 h-32 object-cover"
+              />
+            <input
+              type="file"
+              id="avatar"
+              name="avatar"
+              accept="image/*"
+              className="mt-1 px-4 py-2 border border-gray-300 rounded-md w-full focus:ring-indigo-500 focus:border-indigo-500"
+              value={avatar}
+              onChange={handleChange}
+            />
+           
+            {registerErr && (
+              <span className="text-red-500">{registerErr.confirmPassword}</span>
+            )}
+          </div>
+       
 
           <div className="mt-4">
             <button

@@ -6,10 +6,11 @@ const app = express()
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
-    credentials: true
+    credentials: true,
 }))//which origin we allow are defined , in my case  CORS_ORIGIN=* we allow all addition ,  provide security for production level
 
 // app.use(cors());
+
 // to handle the data files from user ,we accept json (express.json) in older version we use body-paser to accept json but its by default , use limit json  data limit according to server we set
 app.use(express.json({limit: "16kb"}))
 
@@ -29,7 +30,7 @@ import userRouter from "./routes/user.routes.js"
 app.use("/api/v1", userRouter)
 
 
-// http://localhost:4000/api/v1/users/register
+// http://localhost:4000/api/v1/register
 
 
 
